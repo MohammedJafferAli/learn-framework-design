@@ -40,6 +40,7 @@ public class StandAloneTest {
         selectedProduct.findElement(By.cssSelector(".card-body button:last-of-type")).click(); // Add the product to the cart
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#toast-container")));
+        wait.until(ExpectedConditions.invisibilityOfAllElements(driver.findElement(By.cssSelector(".ng-animating"))));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".ng-animating")));
         driver.findElement(By.cssSelector("[routerlink*='cart']")).click(); // Select Cart from global header
 

@@ -10,18 +10,14 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
-import pageobjects.LoginPage;
-import pageobjects.ProductCatalogue;
+import pageobjects.*;
 
 import java.time.Duration;
 import java.util.List;
 
 public class SubmitOrderTest {
-
-    private static final Logger log = LoggerFactory.getLogger(SubmitOrderTest.class);
     public static String productName = "ZARA COAT 3";
 
-    //MohammedJaffer1@practise.com Password.1001
     public static void main(String[] args) throws InterruptedException {
 
         WebDriver driver = new ChromeDriver();
@@ -31,56 +27,31 @@ public class SubmitOrderTest {
         //Pre-condition - Already registered to this website
         LoginPage loginPage = new LoginPage(driver);
         loginPage.launchApp();
-        loginPage.loginToApplication("MohammedJaffer1@practise.com","Password.1001");
-
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-
-        //ProductCatalogue
-        ProductCatalogue productCatalogue = new ProductCatalogue(driver);
+        ProductCatalogue productCatalogue = loginPage.loginToApplication("MohammedJaffer1@practise.com", "Password.1001");
 
         //Get the list of products
-        List<WebElement> listOfProducts = productCatalogue.getProductList();
+        List<WebElement> products = productCatalogue.getProductList();
+        productCatalogue.addProductToCart(productName);
 
-        //Get the product name then click on add to cart
-        WebElement selectedProduct = listOfProducts.stream().filter(product -> product.findElement(By.cssSelector("b")).getText().equals(productName)).findFirst().orElse(null);
-        selectedProduct.findElement(By.cssSelector(".card-body button:last-of-type")).click(); // Add the product to the cart
-
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#toast-container")));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".ng-animating")));
-        driver.findElement(By.cssSelector("[routerlink*='cart']")).click(); // Select Cart from global header
+        // Select Cart from global header
+        CartPage cartPage = productCatalogue.goToCartPage();
 
         //Verify added product available in MyCart
-        List<WebElement> cartProducts = driver.findElements(By.cssSelector(".cartSection h3"));
-        Boolean match = cartProducts.stream().anyMatch(cartProduct -> cartProduct.getText().equalsIgnoreCase(productName));
+        Boolean match = cartPage.verifyCartProducts(productName);
         Assert.assertTrue(match);
+        CheckOutPage checkOutPage = cartPage.goToCheckOut();//Checkout from Mycart page
 
-        //Checkout from Mycart page
-        driver.findElement(By.cssSelector(".totalRow button")).click();
-
-        //Payment page
-        WebElement country  = driver.findElement(By.cssSelector("input[placeholder='Select Country']"));
-
-        Actions customAction = new Actions(driver);
-        customAction.sendKeys(country,"india").build().perform();
-
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".ta-results"))); //Wait for the list to appear
-        //Iterate through the list, find the country & select
-        List<WebElement> countryList = driver.findElements(By.cssSelector(".ta-item"));
-        for(WebElement e : countryList)
-        {
-           if (e.getText().equalsIgnoreCase("India"))
-           {
-               e.click();
-           }
-        }
+        //Checkout/Payment page
+        checkOutPage.selectCountry("India");
         //Place order
-        driver.findElement(By.cssSelector(".action__submit")).click();
+        ConfirmationPage confirmationPage = checkOutPage.placeOrder();
 
-        // Thank you page
-        String confirmMessage = driver.findElement(By.tagName("h1")).getText();
+        // Thank you / Order confirmation page
+        String confirmMessage = confirmationPage.getConfirmaitonMessage();
         Assert.assertTrue(confirmMessage.equalsIgnoreCase("Thankyou for the order."));
 
-        Thread.sleep(500);
+        //Close the application
+        confirmationPage.signOut();
         driver.quit();
 
     }

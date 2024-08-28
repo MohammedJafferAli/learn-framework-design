@@ -11,6 +11,7 @@ public class LoginPage {
 
     public LoginPage(WebDriver driver)
     {
+        super();
         this.driver = driver;
         PageFactory.initElements(driver, this);
     }
@@ -28,11 +29,13 @@ public class LoginPage {
     WebElement btnlogin;
 
     //Action Methods
-    public void loginToApplication(String userName, String password)
+    public ProductCatalogue loginToApplication(String userName, String password)
     {
         inpUserName.sendKeys(userName);
         inpPassword.sendKeys(password);
         btnlogin.click();
+        ProductCatalogue productCatalogue = new ProductCatalogue(driver);
+        return productCatalogue;
     }
 
     public void launchApp()
