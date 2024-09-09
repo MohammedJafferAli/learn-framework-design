@@ -1,32 +1,20 @@
-package standalone;
+package tests;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
+import TestComponents.BaseTest;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.testng.Assert;
+import org.testng.annotations.Test;
 import pageobjects.*;
 
-import java.time.Duration;
+import java.io.IOException;
 import java.util.List;
 
-public class SubmitOrderTest {
+public class SubmitOrderTest extends BaseTest {
     public static String productName = "ZARA COAT 3";
 
-    public static void main(String[] args) throws InterruptedException {
+@Test
+    public void submitOrder() throws IOException {
 
-        WebDriver driver = new ChromeDriver();
-        driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-
-        //Pre-condition - Already registered to this website
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.launchApp();
         ProductCatalogue productCatalogue = loginPage.loginToApplication("MohammedJaffer1@practise.com", "Password.1001");
 
         //Get the list of products
@@ -52,7 +40,5 @@ public class SubmitOrderTest {
 
         //Close the application
         confirmationPage.signOut();
-        driver.quit();
-
     }
 }

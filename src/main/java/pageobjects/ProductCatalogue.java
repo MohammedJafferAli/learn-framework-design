@@ -31,7 +31,8 @@ public class ProductCatalogue extends AbstractComponents {
     By productsBy = By.cssSelector(".mb-3");
     By addToCart = By.cssSelector(".card-body button:last-of-type");
     By toastContainer = By.cssSelector("#toast-container");
-    By ppAddedToCart = By.cssSelector("div.toast-success");
+   // By ppAddedToCart = By.cssSelector("div.toast-success");
+    By ppAddedToCart = By.cssSelector(".ng-trigger-flyInOut");
 
     //Action Methods
     public List<WebElement> getProductList() {
@@ -51,7 +52,7 @@ public class ProductCatalogue extends AbstractComponents {
         WebElement product = getProductByName(productName);
         product.findElement(addToCart).click();
         waitForElementToAppear(toastContainer);
-        waitForElementToAppear(ppAddedToCart);
+        waitForElementToDisappear(ppAddedToCart);
     }
 
 
