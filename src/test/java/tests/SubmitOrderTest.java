@@ -41,4 +41,13 @@ public class SubmitOrderTest extends BaseTest {
         //Close the application
         confirmationPage.signOut();
     }
+
+    @Test(dependsOnMethods = {"submitOrder"})
+    public void verifyOrderHistory()
+    {
+        ProductCatalogue productCatalogue = loginPage.loginToApplication("MohammedJaffer1@practise.com", "Password.1001");
+        OrderPage orderPage = productCatalogue.goToOrdersPage();
+        Assert.assertTrue(orderPage.verifyOrderDisplay(productName));
+
+    }
 }

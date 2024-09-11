@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<!--This runner file will execute all the tests in sequence means one after another -->
+<suite name="All Test Suite">
+    <test verbose="2" preserve-order="true" name="/Users/mohammedjafferali/Documents/learn-framework-design/learn-framework-design">
+    <classes>
+        <class name="tests.LoginErrorValidation">
+            <methods>
+                <include name="loginErrorValidation"/>
+                <include name="productMisMatchValidation"/>
+            </methods>
+        </class>
+        <class name="tests.SubmitOrderTest">
+        </class>
+    </classes>
+    </test>
+</suite>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<!--This runner file will execute all the tests in sequence means one after another -->
+<suite parallel="tests" name="All Test Suite">
+    <test verbose="2" preserve-order="true" name="Error validation ">
+        <classes>
+            <class name="tests.LoginErrorValidation"/>
+        </classes>
+    </test>
+
+    <test preserve-order="true" name="submit order tests">
+        <classes>
+            <class name="tests.SubmitOrderTest">
+            </class>
+        </classes>
+    </test>
+</suite>
